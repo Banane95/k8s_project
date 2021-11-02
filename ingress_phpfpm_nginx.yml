@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress-nginx-phpfpm
+  annotations:
+    INGRESS.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /duck
+        pathType: Prefix
+        backend:
+          service:
+            name: my-phpfpm-service-duck
+            port:
+              number: 80
+      - path: /cat
+        pathType: Prefix
+        backend:
+          service:
+            name: my-phpfpm-service-cat
+            port:
+              number: 80
+      - path: /donut
+        pathType: Prefix
+        backend:
+          service:
+            name: my-phpfpm-service-donut
+            port:
+              number: 80
+      - path: /raccoon
+        pathType: Prefix
+        backend:
+          service:
+            name: my-phpfpm-service-raccoon
+            port:
+              number: 80

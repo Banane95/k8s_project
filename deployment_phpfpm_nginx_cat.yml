@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: my-phpfpm-nginx-cat
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: my-phpfpm-nginx-cat
+  template:
+    metadata:
+      labels:
+        run: my-phpfpm-nginx-cat
+        app: my_app
+    spec:
+        # Add the ConfigMap as a volume to the Pod
+        volumes:
+        # Create the persisting shared storage volume to be used in both pods
+        - name: shared-storage
+          configMap:
+            name: helloworldphp
+        # Add the ConfigMap we declared above as a volume for the pod
+        - name: nginx-config-volume
+          configMap:
+            name: nginx-config
+        - name: phpfpm-config-volume
+          configMap:
+            name: phpfpm-config-cat
+        containers:
+        - name: container-php
+          image: php:7-fpm
+          ports:
+          - containerPort: 9000
+            name: http
+            protocol: TCP
+          volumeMounts:
+            - name: shared-storage
+              mountPath: /var/www/html/cat
+            - name: phpfpm-config-volume
+              mountPath: /usr/local/etc/php-fpm.d/www.conf
+              subPath: www.conf
+        - name: container-nginx
+          image: nginx
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          # Mount the volume that contains the configuration data
+          # into your container filesystem
+          volumeMounts:
+          # `name` here must match the name
+          # from the volumes section of this pod
+            - name: shared-storage
+              mountPath: /var/www/html/cat
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+
+#show the accessible url outside of cluster
+#minikube service --url service_name (my-phpfpm-nginx)
+#kubectl cp specific_www_conf pod_name:/usr/local/etc/php-fpm.d/ -c container-php
+#kubectl exec -ti pod_name -- /bin/bash
+#kill -USR2 1 (inside the container)

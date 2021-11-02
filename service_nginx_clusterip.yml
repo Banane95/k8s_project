@@ -1,0 +1,55 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: my-phpfpm-service-duck
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      name: http
+  selector:
+    run: my-phpfpm-nginx-duck
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: my-phpfpm-service-cat
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      name: http
+  selector:
+    run: my-phpfpm-nginx-cat
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: my-phpfpm-service-donut
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      name: http
+  selector:
+    run: my-phpfpm-nginx-donut
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: my-phpfpm-service-raccoon
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      name: http
+  selector:
+    run: my-phpfpm-nginx-raccoon

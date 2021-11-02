@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: helloworldphp
+data:
+  helloworld.php: |-
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>ElevenLabs</title>
+        </head>
+        <body>
+    <?php
+    $planet = getenv(PLANET);
+    echo "Hello from “ . $planet .“ !<br>";
+    ?>
+        </body>
+    </html>
